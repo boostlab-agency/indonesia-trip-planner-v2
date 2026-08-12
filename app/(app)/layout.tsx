@@ -3,6 +3,7 @@ import { createClient } from "@/lib/supabase/server";
 import { ConfigError } from "@/lib/env";
 import { signOut } from "@/lib/actions/auth";
 import { Nav } from "@/components/layout/Nav";
+import { BottomNav } from "@/components/layout/BottomNav";
 import { Button } from "@/components/ui/Button";
 
 export default async function AppLayout({ children }: { children: React.ReactNode }) {
@@ -38,11 +39,13 @@ export default async function AppLayout({ children }: { children: React.ReactNod
       <header className="border-b border-slate-200 bg-white">
         <div className="mx-auto flex max-w-5xl flex-wrap items-center justify-between gap-4 px-4 py-4">
           <div className="flex flex-wrap items-center gap-4">
-            <span className="text-sm font-semibold text-slate-900">Indonesia Trip Planner</span>
+            <span className="text-sm font-semibold text-slate-900">Indonesië Reis</span>
             <Nav />
           </div>
           <div className="flex items-center gap-3">
-            {userEmail && <span className="text-sm text-slate-500">{userEmail}</span>}
+            {userEmail && (
+              <span className="hidden truncate text-sm text-slate-500 sm:inline">{userEmail}</span>
+            )}
             <form action={signOut}>
               <Button type="submit" variant="secondary">
                 Uitloggen
@@ -51,7 +54,8 @@ export default async function AppLayout({ children }: { children: React.ReactNod
           </div>
         </div>
       </header>
-      <main className="mx-auto max-w-5xl px-4 py-6">{children}</main>
+      <main className="mx-auto max-w-5xl px-4 py-6 pb-24 sm:pb-6">{children}</main>
+      <BottomNav />
     </div>
   );
 }

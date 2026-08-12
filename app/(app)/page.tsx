@@ -32,12 +32,20 @@ export default async function DashboardPage() {
     listPhotos(),
   ]);
 
-  const firstError = summaryResult.error ?? destinationsResult.error;
-  if (firstError !== null) {
+  if (summaryResult.error !== null) {
     return (
       <div className="space-y-4">
         <h1 className="text-2xl font-semibold text-slate-900">Dashboard</h1>
-        <ErrorBanner message={firstError} />
+        <ErrorBanner message={summaryResult.error} />
+      </div>
+    );
+  }
+
+  if (destinationsResult.error !== null) {
+    return (
+      <div className="space-y-4">
+        <h1 className="text-2xl font-semibold text-slate-900">Dashboard</h1>
+        <ErrorBanner message={destinationsResult.error} />
       </div>
     );
   }

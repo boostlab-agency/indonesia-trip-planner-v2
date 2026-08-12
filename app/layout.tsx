@@ -3,7 +3,7 @@ import "leaflet/dist/leaflet.css";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "Indonesia Trip Planner",
+  title: "Indonesië Reis",
   description: "Gedeelde reisplanner voor de Indonesië-trip",
 };
 

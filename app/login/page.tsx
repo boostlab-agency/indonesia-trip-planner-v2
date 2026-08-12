@@ -45,9 +45,13 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-slate-50 p-6">
-      <div className="w-full max-w-sm rounded-lg border border-slate-200 bg-white p-6 shadow-sm">
-        <h1 className="text-lg font-semibold text-slate-900">Indonesia Trip Planner</h1>
+    <div
+      className="flex min-h-screen items-center justify-center p-6"
+      style={{ background: "linear-gradient(135deg, #134536, #18855f 55%, #48c090)" }}
+    >
+      <div className="w-full max-w-sm rounded-2xl border border-white/20 bg-white p-7 shadow-xl">
+        <p className="text-xs font-medium uppercase tracking-wide text-brand-600">Reisplanner</p>
+        <h1 className="mt-1 text-2xl font-semibold text-slate-900">Indonesië Reis</h1>
         <p className="mt-1 text-sm text-slate-500">Log in om de reisplanner te bekijken.</p>
 
         <form onSubmit={handleSubmit} className="mt-6 space-y-4">
