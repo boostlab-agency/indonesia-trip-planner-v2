@@ -23,7 +23,7 @@ const columns: ColumnConfig<Accommodation>[] = [
   { key: "address", label: "Adres" },
   { key: "check_in", label: "Check-in" },
   { key: "check_out", label: "Check-out" },
-  { key: "price", label: "Prijs", render: (row) => (row.price != null ? `€ ${row.price}` : "-") },
+  { key: "price", label: "Prijs", format: "currency" },
 ];
 
 export default async function AccommodationsPage() {

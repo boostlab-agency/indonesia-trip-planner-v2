@@ -11,6 +11,21 @@ interface CrudTableProps<T extends WithId> {
   onDelete: (row: T) => void;
 }
 
+function formatCellValue(value: unknown, format: ColumnConfig<WithId>["format"]): string {
+  if (value === null || value === undefined || value === "") return "-";
+
+  if (format === "currency") {
+    const amount = Number(value);
+    if (!Number.isNaN(amount)) {
+      return new Intl.NumberFormat("nl-NL", { style: "currency", currency: "EUR" }).format(
+        amount
+      );
+    }
+  }
+
+  return String(value);
+}
+
 export function CrudTable<T extends WithId>({
   columns,
   rows,
@@ -44,7 +59,7 @@ export function CrudTable<T extends WithId>({
             <tr key={row.id}>
               {columns.map((col) => (
                 <td key={col.key} className="whitespace-nowrap px-4 py-2 text-slate-700">
-                  {col.render ? col.render(row) : String(row[col.key] ?? "-")}
+                  {formatCellValue(row[col.key], col.format)}
                 </td>
               ))}
               <td className="px-4 py-2 text-right">

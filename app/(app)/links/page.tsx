@@ -12,11 +12,7 @@ const fields: FieldConfig<LinkItem>[] = [
 
 const columns: ColumnConfig<LinkItem>[] = [
   { key: "title", label: "Titel" },
-  {
-    key: "url",
-    label: "URL",
-    render: (row) => row.url,
-  },
+  { key: "url", label: "URL" },
   { key: "category", label: "Categorie" },
 ];
 

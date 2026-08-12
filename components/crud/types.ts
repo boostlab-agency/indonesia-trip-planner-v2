@@ -24,10 +24,16 @@ export interface FieldConfig<T> {
   options?: SelectOption[];
 }
 
+export type ColumnFormat = "currency";
+
 export interface ColumnConfig<T> {
   key: keyof T & string;
   label: string;
-  render?: (row: T) => string;
+  // Let op: geen functies hier (bv. render(row) => ...). Kolommen worden
+  // gedefinieerd in Server Component pages en als prop doorgegeven aan de
+  // Client Component ResourceManager -- functies mogen die grens niet over,
+  // alleen serialiseerbare data zoals deze format-vlag.
+  format?: ColumnFormat;
 }
 
 export interface ResourceActions<T> {

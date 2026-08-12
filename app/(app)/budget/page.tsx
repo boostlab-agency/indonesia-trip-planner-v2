@@ -21,11 +21,7 @@ const fields: FieldConfig<BudgetItem>[] = [
 const columns: ColumnConfig<BudgetItem>[] = [
   { key: "category", label: "Categorie" },
   { key: "description", label: "Omschrijving" },
-  {
-    key: "amount",
-    label: "Bedrag",
-    render: (row) => `${row.amount} ${row.currency ?? "EUR"}`,
-  },
+  { key: "amount", label: "Bedrag", format: "currency" },
   { key: "paid_by", label: "Betaald door" },
 ];
 
