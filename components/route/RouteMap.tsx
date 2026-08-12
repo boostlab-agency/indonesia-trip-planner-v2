@@ -1,20 +1,9 @@
 "use client";
 
 import { MapContainer, TileLayer, Marker, Polyline, Popup } from "react-leaflet";
-import L from "leaflet";
 import Link from "next/link";
+import { markerIcon } from "@/components/map/markerIcon";
 import type { Destination } from "@/lib/types";
-
-// Leaflet's standaard marker-iconbestanden lossen niet correct op onder
-// bundlers zoals Next.js; verwijzen naar de CDN-versie is de gangbare fix.
-const markerIcon = new L.Icon({
-  iconUrl: "https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon.png",
-  iconRetinaUrl: "https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon-2x.png",
-  shadowUrl: "https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png",
-  iconSize: [25, 41],
-  iconAnchor: [12, 41],
-  popupAnchor: [1, -34],
-});
 
 interface RouteMapProps {
   destinations: Destination[];
@@ -29,7 +18,7 @@ export function RouteMap({ destinations }: RouteMapProps) {
     return (
       <div className="flex h-full min-h-[300px] flex-col items-center justify-center gap-1 rounded-2xl bg-slate-100 p-6 text-center text-sm text-slate-500">
         <p>Nog geen coördinaten ingesteld.</p>
-        <p>Vul breedte-/lengtegraad in bij een bestemming om &apos;m op de kaart te zien.</p>
+        <p>Vul een adres of locatie in bij een bestemming om &apos;m op de kaart te zien.</p>
       </div>
     );
   }

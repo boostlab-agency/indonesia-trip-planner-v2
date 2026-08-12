@@ -11,9 +11,13 @@ import type { ColumnConfig, FieldConfig } from "@/components/crud/types";
 const fields: FieldConfig<Destination>[] = [
   { name: "name", label: "Naam", type: "text", required: true },
   { name: "sort_order", label: "Volgorde in route", type: "number", required: true, placeholder: "1" },
-  { name: "location", label: "Locatie", type: "text" },
-  { name: "lat", label: "Breedtegraad (lat)", type: "number", placeholder: "-7.797068" },
-  { name: "lng", label: "Lengtegraad (lng)", type: "number", placeholder: "110.370529" },
+  {
+    name: "location",
+    label: "Adres of locatie",
+    type: "location",
+    placeholder: 'Plaatsnaam, adres, of plak een Google Maps-link (bv. "Ubud, Bali")',
+    locationTarget: { latField: "lat", lngField: "lng" },
+  },
   { name: "start_date", label: "Startdatum", type: "date" },
   { name: "end_date", label: "Einddatum", type: "date" },
   { name: "description", label: "Beschrijving", type: "textarea" },

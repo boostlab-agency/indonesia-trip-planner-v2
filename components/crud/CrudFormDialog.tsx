@@ -1,12 +1,13 @@
 "use client";
 
-import { FormEvent, useEffect, useState } from "react";
+import { FormEvent, useEffect, useRef, useState } from "react";
 import { Modal } from "@/components/ui/Modal";
 import { Input } from "@/components/ui/Input";
 import { Textarea } from "@/components/ui/Textarea";
 import { Select } from "@/components/ui/Select";
 import { Button } from "@/components/ui/Button";
 import { ErrorBanner } from "@/components/ui/ErrorBanner";
+import { LocationField, type LocationFieldHandle } from "./LocationField";
 import type { FieldConfig } from "./types";
 import type { ActionResult } from "@/lib/types";
 
@@ -18,6 +19,19 @@ interface CrudFormDialogProps<T> {
   onClose: () => void;
   onSubmit: (values: Record<string, unknown>) => Promise<ActionResult<T>>;
   onSuccess: (data: T) => void;
+}
+
+function getInitialCoords<T>(
+  initialValues: Partial<T> | null,
+  target: { latField: keyof T & string; lngField: keyof T & string } | undefined
+): { lat: number; lng: number } | null {
+  if (!initialValues || !target) return null;
+  const lat = initialValues[target.latField];
+  const lng = initialValues[target.lngField];
+  if (typeof lat === "number" && typeof lng === "number") {
+    return { lat, lng };
+  }
+  return null;
 }
 
 export function CrudFormDialog<T>({
@@ -32,6 +46,7 @@ export function CrudFormDialog<T>({
   const [values, setValues] = useState<Record<string, string>>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const locationRefs = useRef<Record<string, LocationFieldHandle | null>>({});
 
   useEffect(() => {
     if (!open) return;
@@ -67,7 +82,34 @@ export function CrudFormDialog<T>({
 
     const isEditing = initialValues !== null;
     const payload: Record<string, unknown> = {};
+
     for (const field of fields) {
+      if (field.type === "location") {
+        const handle = locationRefs.current[field.name];
+        const resolved = handle ? await handle.resolve() : null;
+
+        if (resolved && "error" in resolved) {
+          setError(`${field.label}: ${resolved.error}`);
+          setIsSubmitting(false);
+          return;
+        }
+
+        if (resolved === null) {
+          payload[field.name] = null;
+          if (field.locationTarget) {
+            payload[field.locationTarget.latField] = null;
+            payload[field.locationTarget.lngField] = null;
+          }
+        } else {
+          payload[field.name] = resolved.text;
+          if (field.locationTarget) {
+            payload[field.locationTarget.latField] = resolved.lat;
+            payload[field.locationTarget.lngField] = resolved.lng;
+          }
+        }
+        continue;
+      }
+
       const raw = values[field.name] ?? "";
       if (raw === "") {
         // Bij aanmaken: optioneel + leeg -> veld weglaten zodat het
@@ -127,6 +169,17 @@ export function CrudFormDialog<T>({
                   </option>
                 ))}
               </Select>
+            ) : field.type === "location" ? (
+              <LocationField
+                ref={(el) => {
+                  locationRefs.current[field.name] = el;
+                }}
+                value={values[field.name] ?? ""}
+                onChange={(v) => handleChange(field.name, v)}
+                initialCoords={getInitialCoords(initialValues, field.locationTarget)}
+                placeholder={field.placeholder}
+                required={field.required}
+              />
             ) : (
               <Input
                 type={field.type}

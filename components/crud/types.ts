@@ -8,7 +8,8 @@ export type FieldType =
   | "time"
   | "datetime-local"
   | "url"
-  | "select";
+  | "select"
+  | "location";
 
 export interface SelectOption {
   value: string;
@@ -22,6 +23,9 @@ export interface FieldConfig<T> {
   required?: boolean;
   placeholder?: string;
   options?: SelectOption[];
+  // Alleen voor type "location": welke velden de geocodede coördinaten
+  // moeten ontvangen bij opslaan.
+  locationTarget?: { latField: keyof T & string; lngField: keyof T & string };
 }
 
 export type ColumnFormat = "currency";
