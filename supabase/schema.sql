@@ -194,6 +194,23 @@ create policy "authenticated_full_access" on public.links
   with check (auth.uid() is not null);
 
 -- ---------------------------------------------------------------------------
+-- Tabel-level rechten (GRANT)
+-- RLS-policies bepalen alleen welke RIJEN een rol mag zien/wijzigen; de rol
+-- moet daarnaast tabel-rechten hebben, anders krijg je "permission denied
+-- for table ..." (Postgres 42501) ook al staan de policies goed. Supabase
+-- zet dit meestal automatisch goed, maar bij tabellen die via een los
+-- SQL-script zijn aangemaakt kan dit missen -- daarom hier expliciet.
+-- ---------------------------------------------------------------------------
+grant usage on schema public to authenticated;
+
+grant select, insert, update, delete on public.destinations to authenticated;
+grant select, insert, update, delete on public.accommodations to authenticated;
+grant select, insert, update, delete on public.transport to authenticated;
+grant select, insert, update, delete on public.activities to authenticated;
+grant select, insert, update, delete on public.budget_items to authenticated;
+grant select, insert, update, delete on public.links to authenticated;
+
+-- ---------------------------------------------------------------------------
 -- Indexen voor de meest gebruikte sorteer-/filtervelden
 -- ---------------------------------------------------------------------------
 create index if not exists idx_accommodations_destination_id on public.accommodations(destination_id);
