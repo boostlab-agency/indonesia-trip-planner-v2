@@ -65,12 +65,20 @@ export function CrudFormDialog<T>({
     setIsSubmitting(true);
     setError(null);
 
+    const isEditing = initialValues !== null;
     const payload: Record<string, unknown> = {};
     for (const field of fields) {
       const raw = values[field.name] ?? "";
       if (raw === "") {
-        payload[field.name] = null;
-      } else if (field.type === "number") {
+        // Bij aanmaken: optioneel + leeg -> veld weglaten zodat het
+        // database-default (bv. valuta "EUR") van toepassing is, in plaats
+        // van expliciet null te sturen naar een NOT NULL-kolom.
+        if (isEditing || field.required) {
+          payload[field.name] = null;
+        }
+        continue;
+      }
+      if (field.type === "number") {
         const parsed = Number(raw);
         payload[field.name] = Number.isNaN(parsed) ? null : parsed;
       } else {

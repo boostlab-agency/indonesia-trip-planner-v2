@@ -5,12 +5,14 @@ import { usePathname } from "next/navigation";
 
 const NAV_ITEMS = [
   { href: "/", label: "Dashboard" },
-  { href: "/destinations", label: "Bestemmingen" },
+  { href: "/route", label: "Route" },
+  { href: "/album", label: "Reisalbum" },
   { href: "/accommodations", label: "Accommodaties" },
   { href: "/transport", label: "Vervoer" },
   { href: "/activities", label: "Activiteiten" },
   { href: "/budget", label: "Budget" },
   { href: "/links", label: "Links" },
+  { href: "/destinations", label: "Bestemmingen" },
 ];
 
 export function Nav() {

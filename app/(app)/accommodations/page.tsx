@@ -5,18 +5,9 @@ import {
   listAccommodations,
   updateAccommodation,
 } from "@/lib/actions/accommodations";
+import { listDestinations } from "@/lib/actions/destinations";
 import type { Accommodation } from "@/lib/types";
 import type { ColumnConfig, FieldConfig } from "@/components/crud/types";
-
-const fields: FieldConfig<Accommodation>[] = [
-  { name: "name", label: "Naam", type: "text", required: true },
-  { name: "address", label: "Adres", type: "text" },
-  { name: "check_in", label: "Check-in", type: "date" },
-  { name: "check_out", label: "Check-out", type: "date" },
-  { name: "price", label: "Prijs", type: "number" },
-  { name: "booking_link", label: "Boekingslink", type: "url" },
-  { name: "notes", label: "Notities", type: "textarea" },
-];
 
 const columns: ColumnConfig<Accommodation>[] = [
   { key: "name", label: "Naam" },
@@ -27,7 +18,26 @@ const columns: ColumnConfig<Accommodation>[] = [
 ];
 
 export default async function AccommodationsPage() {
-  const result = await listAccommodations();
+  const [result, destinationsResult] = await Promise.all([
+    listAccommodations(),
+    listDestinations(),
+  ]);
+
+  const fields: FieldConfig<Accommodation>[] = [
+    { name: "name", label: "Naam", type: "text", required: true },
+    {
+      name: "destination_id",
+      label: "Bestemming",
+      type: "select",
+      options: (destinationsResult.data ?? []).map((d) => ({ value: d.id, label: d.name })),
+    },
+    { name: "address", label: "Adres", type: "text" },
+    { name: "check_in", label: "Check-in", type: "date" },
+    { name: "check_out", label: "Check-out", type: "date" },
+    { name: "price", label: "Prijs", type: "number" },
+    { name: "booking_link", label: "Boekingslink", type: "url" },
+    { name: "notes", label: "Notities", type: "textarea" },
+  ];
 
   return (
     <ResourceManager<Accommodation>

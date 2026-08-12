@@ -10,7 +10,10 @@ import type { ColumnConfig, FieldConfig } from "@/components/crud/types";
 
 const fields: FieldConfig<Destination>[] = [
   { name: "name", label: "Naam", type: "text", required: true },
+  { name: "sort_order", label: "Volgorde in route", type: "number", required: true, placeholder: "1" },
   { name: "location", label: "Locatie", type: "text" },
+  { name: "lat", label: "Breedtegraad (lat)", type: "number", placeholder: "-7.797068" },
+  { name: "lng", label: "Lengtegraad (lng)", type: "number", placeholder: "110.370529" },
   { name: "start_date", label: "Startdatum", type: "date" },
   { name: "end_date", label: "Einddatum", type: "date" },
   { name: "description", label: "Beschrijving", type: "textarea" },
@@ -18,6 +21,7 @@ const fields: FieldConfig<Destination>[] = [
 ];
 
 const columns: ColumnConfig<Destination>[] = [
+  { key: "sort_order", label: "#" },
   { key: "name", label: "Naam" },
   { key: "location", label: "Locatie" },
   { key: "start_date", label: "Start" },
@@ -29,8 +33,8 @@ export default async function DestinationsPage() {
 
   return (
     <ResourceManager<Destination>
-      title="Bestemmingen"
-      description="Alle plekken die jullie gaan bezoeken tijdens de reis."
+      title="Bestemmingen beheren"
+      description="Voeg bestemmingen toe en stel de volgorde en coördinaten in voor de route en kaart. Bekijk de reis zelf op de Route-pagina."
       addButtonLabel="Bestemming toevoegen"
       emptyMessage="Nog geen bestemmingen toegevoegd."
       initialItems={result.data ?? []}
