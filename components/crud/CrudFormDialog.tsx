@@ -81,7 +81,7 @@ export function CrudFormDialog<T>({
     const result = await onSubmit(payload);
     setIsSubmitting(false);
 
-    if (result.error) {
+    if (result.error !== null) {
       setError(result.error);
       return;
     }

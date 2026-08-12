@@ -24,7 +24,7 @@ function formatDate(value: string | null) {
 export default async function DashboardPage() {
   const result = await getDashboardSummary();
 
-  if (result.error) {
+  if (result.error !== null) {
     return (
       <div className="space-y-4">
         <h1 className="text-xl font-semibold text-slate-900">Dashboard</h1>

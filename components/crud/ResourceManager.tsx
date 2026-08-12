@@ -74,7 +74,7 @@ export function ResourceManager<T extends WithId>({
     const result = await actions.remove(deleteTarget.id);
     setIsDeleting(false);
 
-    if (result.error) {
+    if (result.error !== null) {
       setDeleteError(result.error);
       return;
     }
