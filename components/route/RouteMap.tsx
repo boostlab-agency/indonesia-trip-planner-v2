@@ -29,7 +29,7 @@ export function RouteMap({ destinations }: RouteMapProps) {
     return (
       <div className="flex h-full min-h-[300px] flex-col items-center justify-center gap-1 rounded-2xl bg-slate-100 p-6 text-center text-sm text-slate-500">
         <p>Nog geen coördinaten ingesteld.</p>
-        <p>Vul breedte-/lengtegraad in bij een bestemming om 'm op de kaart te zien.</p>
+        <p>Vul breedte-/lengtegraad in bij een bestemming om &apos;m op de kaart te zien.</p>
       </div>
     );
   }

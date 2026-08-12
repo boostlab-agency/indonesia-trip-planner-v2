@@ -9,7 +9,7 @@ export default async function AlbumPage() {
     <div className="space-y-6">
       <div>
         <h1 className="text-2xl font-semibold text-slate-900">Reisalbum</h1>
-        <p className="mt-1 text-sm text-slate-500">Alle foto's van de reis, op één plek.</p>
+        <p className="mt-1 text-sm text-slate-500">Alle foto&apos;s van de reis, op één plek.</p>
       </div>
 
       {result.error !== null ? (

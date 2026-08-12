@@ -270,7 +270,7 @@ export default async function DestinationHubPage({ params }: PageProps) {
       )}
 
       <section className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
-        <h2 className="mb-3 font-semibold text-slate-900">Foto's</h2>
+        <h2 className="mb-3 font-semibold text-slate-900">Foto&apos;s</h2>
         <PhotoSection
           destinationId={id}
           initialPhotos={photosResult.data ?? []}

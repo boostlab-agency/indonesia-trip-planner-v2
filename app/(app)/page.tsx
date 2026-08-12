@@ -109,7 +109,7 @@ export default async function DashboardPage() {
           className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm transition-colors hover:border-brand-400"
         >
           <p className="text-2xl font-semibold text-slate-900">{photos.length}</p>
-          <p className="mt-1 text-sm text-slate-500">Foto's</p>
+          <p className="mt-1 text-sm text-slate-500">Foto&apos;s</p>
         </Link>
       </div>
 
@@ -155,7 +155,7 @@ export default async function DashboardPage() {
         </div>
         {photos.length === 0 ? (
           <p className="text-sm text-slate-500">
-            Nog geen foto's. Voeg je eerste reisfoto toe via het album.
+            Nog geen foto&apos;s. Voeg je eerste reisfoto toe via het album.
           </p>
         ) : (
           <div className="grid grid-cols-4 gap-2 sm:grid-cols-8">
