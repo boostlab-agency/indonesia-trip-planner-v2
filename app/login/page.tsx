@@ -2,14 +2,13 @@
 
 import { FormEvent, useState } from "react";
 import { useRouter } from "next/navigation";
-import { createClient } from "@/lib/supabase/client";
+import { signInWithSharedPassword } from "@/lib/actions/auth";
 import { Input } from "@/components/ui/Input";
 import { Button } from "@/components/ui/Button";
 import { ErrorBanner } from "@/components/ui/ErrorBanner";
 
 export default function LoginPage() {
   const router = useRouter();
-  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -20,18 +19,10 @@ export default function LoginPage() {
     setIsSubmitting(true);
 
     try {
-      const supabase = createClient();
-      const { error: signInError } = await supabase.auth.signInWithPassword({
-        email,
-        password,
-      });
+      const result = await signInWithSharedPassword(password);
 
-      if (signInError) {
-        setError(
-          signInError.message === "Invalid login credentials"
-            ? "E-mailadres of wachtwoord is onjuist."
-            : signInError.message
-        );
+      if (result.error !== null) {
+        setError(result.error);
         setIsSubmitting(false);
         return;
       }
@@ -52,27 +43,16 @@ export default function LoginPage() {
       <div className="w-full max-w-sm rounded-2xl border border-white/20 bg-white p-7 shadow-xl">
         <p className="text-xs font-medium uppercase tracking-wide text-brand-600">Reisplanner</p>
         <h1 className="mt-1 text-2xl font-semibold text-slate-900">Indonesië Reis</h1>
-        <p className="mt-1 text-sm text-slate-500">Log in om de reisplanner te bekijken.</p>
+        <p className="mt-1 text-sm text-slate-500">Voer het reiswachtwoord in om verder te gaan.</p>
 
         <form onSubmit={handleSubmit} className="mt-6 space-y-4">
           <ErrorBanner message={error} onDismiss={() => setError(null)} />
-          <div>
-            <label className="mb-1 block text-sm font-medium text-slate-700">
-              E-mailadres
-            </label>
-            <Input
-              type="email"
-              required
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              autoComplete="email"
-            />
-          </div>
           <div>
             <label className="mb-1 block text-sm font-medium text-slate-700">Wachtwoord</label>
             <Input
               type="password"
               required
+              autoFocus
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               autoComplete="current-password"

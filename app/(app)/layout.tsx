@@ -7,8 +7,6 @@ import { BottomNav } from "@/components/layout/BottomNav";
 import { Button } from "@/components/ui/Button";
 
 export default async function AppLayout({ children }: { children: React.ReactNode }) {
-  let userEmail: string | null = null;
-
   try {
     const supabase = await createClient();
     const {
@@ -18,8 +16,6 @@ export default async function AppLayout({ children }: { children: React.ReactNod
     if (!user) {
       redirect("/login");
     }
-
-    userEmail = user.email ?? null;
   } catch (err) {
     if (err instanceof ConfigError) {
       return (
@@ -43,9 +39,6 @@ export default async function AppLayout({ children }: { children: React.ReactNod
             <Nav />
           </div>
           <div className="flex items-center gap-3">
-            {userEmail && (
-              <span className="hidden truncate text-sm text-slate-500 sm:inline">{userEmail}</span>
-            )}
             <form action={signOut}>
               <Button type="submit" variant="secondary">
                 Uitloggen

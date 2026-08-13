@@ -19,11 +19,20 @@ Alle fouten (ontbrekende configuratie, mislukte database-acties, onverwachte ren
 ## 1. Supabase-project voorbereiden
 
 1. Open je Supabase project → **SQL Editor** → **New query**.
-2. Plak de volledige inhoud van [`supabase/schema.sql`](supabase/schema.sql) en voer uit. Dit maakt alle 6 tabellen, triggers en Row Level Security-policies aan. Het script is idempotent (veilig opnieuw te draaien).
-3. Ga naar **Authentication → Users** en maak de **2 accounts** aan (e-mail + wachtwoord) voor de twee gebruikers. Er is geen publieke registratiepagina — dit is bewust, alleen deze 2 accounts kunnen inloggen.
+2. Plak de volledige inhoud van [`supabase/schema.sql`](supabase/schema.sql) en voer uit. Dit maakt alle tabellen, triggers, storage-bucket en Row Level Security-policies aan. Het script is idempotent (veilig opnieuw te draaien). Op een bestaand project: draai in plaats daarvan de losse migratiebestanden (`supabase/migration_00x_*.sql`) die je nog niet eerder hebt uitgevoerd.
+3. Ga naar **Authentication → Users** en zorg dat er **minstens 1 account** bestaat (e-mail + wachtwoord). De app gebruikt dit account server-side achter één gedeeld reiswachtwoord — zie hieronder. Er is geen publieke registratiepagina.
 4. Ga naar **Settings → API** en noteer:
    - **Project URL**
    - **anon public key**
+
+### Inloggen: één gedeeld wachtwoord
+
+Gebruikers zien alleen een wachtwoordveld, nooit een e-mailadres. Dit werkt via twee environment variables die verwijzen naar het Supabase-account uit stap 3:
+
+- `APP_LOGIN_EMAIL` — het e-mailadres van dat account.
+- `APP_LOGIN_PASSWORD` — het wachtwoord van dat account. Dit is exact het wachtwoord dat gebruikers in de app intypen, dus zet dit account in Supabase op het gewenste gedeelde wachtwoord.
+
+Beide zijn **server-only** (geen `NEXT_PUBLIC_`-prefix) en horen dus nooit in de browser terecht te komen.
 
 ## 2. Lokale configuratie (optioneel, alleen als je wél lokaal Node.js hebt)
 
@@ -43,8 +52,10 @@ Dit project is zo gebouwd dat lokale Node.js **niet** verplicht is — Vercel vo
 3. Zet bij **Environment Variables**:
    - `NEXT_PUBLIC_SUPABASE_URL`
    - `NEXT_PUBLIC_SUPABASE_ANON_KEY`
+   - `APP_LOGIN_EMAIL`
+   - `APP_LOGIN_PASSWORD`
 4. Deploy. Vercel detecteert Next.js automatisch (build command `next build`, output `.next`).
-5. Na de deploy: log in op de live URL met een van de 2 Supabase Auth-accounts en loop één keer alle 7 modules door (aanmaken/bewerken/verwijderen) als laatste check.
+5. Na de deploy: log in op de live URL met het gedeelde wachtwoord en loop de modules door als laatste check.
 
 ## Architectuur (kort)
 
