@@ -28,6 +28,8 @@ export async function listPhotos(destinationId?: string): Promise<ActionResult<P
 
 export async function createPhoto(input: {
   destination_id: string | null;
+  activity_id?: string | null;
+  accommodation_id?: string | null;
   storage_path: string;
   caption?: string | null;
 }): Promise<ActionResult<Photo>> {
@@ -37,6 +39,8 @@ export async function createPhoto(input: {
       .from("photos")
       .insert({
         destination_id: input.destination_id,
+        activity_id: input.activity_id ?? null,
+        accommodation_id: input.accommodation_id ?? null,
         storage_path: input.storage_path,
         caption: input.caption ?? null,
       })

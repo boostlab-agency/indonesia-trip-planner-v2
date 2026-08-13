@@ -2,12 +2,10 @@
 
 import { FormEvent, useEffect, useRef, useState } from "react";
 import { Modal } from "@/components/ui/Modal";
-import { Input } from "@/components/ui/Input";
-import { Textarea } from "@/components/ui/Textarea";
-import { Select } from "@/components/ui/Select";
 import { Button } from "@/components/ui/Button";
 import { ErrorBanner } from "@/components/ui/ErrorBanner";
-import { LocationField, type LocationFieldHandle } from "./LocationField";
+import { FieldInput } from "./FieldInput";
+import type { LocationFieldHandle } from "./LocationField";
 import type { FieldConfig } from "./types";
 import type { ActionResult } from "@/lib/types";
 
@@ -144,53 +142,16 @@ export function CrudFormDialog<T>({
       <form onSubmit={handleSubmit} className="space-y-4">
         <ErrorBanner message={error} onDismiss={() => setError(null)} />
         {fields.map((field) => (
-          <div key={field.name}>
-            <label className="mb-1 block text-sm font-medium text-slate-700">
-              {field.label}
-              {field.required && <span className="text-red-500"> *</span>}
-            </label>
-            {field.type === "textarea" ? (
-              <Textarea
-                value={values[field.name] ?? ""}
-                onChange={(e) => handleChange(field.name, e.target.value)}
-                required={field.required}
-                placeholder={field.placeholder}
-              />
-            ) : field.type === "select" ? (
-              <Select
-                value={values[field.name] ?? ""}
-                onChange={(e) => handleChange(field.name, e.target.value)}
-                required={field.required}
-              >
-                <option value="">Kies...</option>
-                {field.options?.map((opt) => (
-                  <option key={opt.value} value={opt.value}>
-                    {opt.label}
-                  </option>
-                ))}
-              </Select>
-            ) : field.type === "location" ? (
-              <LocationField
-                ref={(el) => {
-                  locationRefs.current[field.name] = el;
-                }}
-                value={values[field.name] ?? ""}
-                onChange={(v) => handleChange(field.name, v)}
-                initialCoords={getInitialCoords(initialValues, field.locationTarget)}
-                placeholder={field.placeholder}
-                required={field.required}
-              />
-            ) : (
-              <Input
-                type={field.type}
-                step={field.type === "number" ? "0.01" : undefined}
-                value={values[field.name] ?? ""}
-                onChange={(e) => handleChange(field.name, e.target.value)}
-                required={field.required}
-                placeholder={field.placeholder}
-              />
-            )}
-          </div>
+          <FieldInput
+            key={field.name}
+            field={field}
+            value={values[field.name] ?? ""}
+            onChange={(v) => handleChange(field.name, v)}
+            locationRef={(el) => {
+              locationRefs.current[field.name] = el;
+            }}
+            initialCoords={getInitialCoords(initialValues, field.locationTarget)}
+          />
         ))}
         <div className="flex justify-end gap-2 pt-2">
           <Button type="button" variant="secondary" onClick={onClose} disabled={isSubmitting}>

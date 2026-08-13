@@ -23,6 +23,9 @@ export interface Accommodation {
   destination_id: string | null;
   name: string;
   address: string | null;
+  lat: number | null;
+  lng: number | null;
+  cover_photo_url: string | null;
   check_in: string | null;
   check_out: string | null;
   price: number | null;
@@ -56,6 +59,8 @@ export interface Activity {
   activity_date: string | null;
   activity_time: string | null;
   location: string | null;
+  lat: number | null;
+  lng: number | null;
   price: number | null;
   notes: string | null;
   created_at: string;
@@ -65,6 +70,7 @@ export interface Activity {
 export interface BudgetItem {
   id: string;
   destination_id: string | null;
+  activity_id: string | null;
   category: string;
   description: string | null;
   amount: number;
@@ -91,8 +97,17 @@ export interface LinkItem {
 export interface Photo {
   id: string;
   destination_id: string | null;
+  activity_id: string | null;
+  accommodation_id: string | null;
   storage_path: string;
   caption: string | null;
+  created_at: string;
+}
+
+export interface Note {
+  id: string;
+  destination_id: string | null;
+  body: string;
   created_at: string;
 }
 

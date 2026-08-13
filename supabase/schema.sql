@@ -304,3 +304,50 @@ create policy "trip_photos_authenticated_delete" on storage.objects
   for delete
   to authenticated
   using (bucket_id = 'trip-photos');
+
+-- =============================================================================
+-- V3: Polarsteps-stijl uitbreidingen (zie ook supabase/migration_003_polarsteps.sql
+-- voor een losse migratie op een bestaand project)
+-- =============================================================================
+
+alter table public.accommodations
+  add column if not exists lat numeric(9, 6),
+  add column if not exists lng numeric(9, 6),
+  add column if not exists cover_photo_url text;
+
+alter table public.activities
+  add column if not exists lat numeric(9, 6),
+  add column if not exists lng numeric(9, 6);
+
+alter table public.budget_items
+  add column if not exists activity_id uuid references public.activities(id) on delete set null;
+
+create index if not exists idx_budget_items_activity_id on public.budget_items(activity_id);
+
+alter table public.photos
+  add column if not exists activity_id uuid references public.activities(id) on delete cascade,
+  add column if not exists accommodation_id uuid references public.accommodations(id) on delete cascade;
+
+create index if not exists idx_photos_activity_id on public.photos(activity_id);
+create index if not exists idx_photos_accommodation_id on public.photos(accommodation_id);
+
+create table if not exists public.notes (
+  id uuid primary key default gen_random_uuid(),
+  destination_id uuid references public.destinations(id) on delete cascade,
+  body text not null,
+  created_by uuid references auth.users(id) on delete set null,
+  created_at timestamptz not null default now()
+);
+
+alter table public.notes enable row level security;
+
+drop policy if exists "authenticated_full_access" on public.notes;
+create policy "authenticated_full_access" on public.notes
+  for all to authenticated
+  using (auth.uid() is not null)
+  with check (auth.uid() is not null);
+
+grant select, insert, update, delete on public.notes to authenticated;
+
+create index if not exists idx_notes_destination_id on public.notes(destination_id);
+create index if not exists idx_notes_created_at on public.notes(created_at);
