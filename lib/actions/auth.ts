@@ -35,15 +35,25 @@ export async function signInWithSharedPassword(
 
   try {
     const supabase = await createClient();
-    const { error } = await supabase.auth.signInWithPassword({ email, password });
+    console.log(`[auth] signInWithSharedPassword: probeer in te loggen als ${email}`);
+    const { data, error } = await supabase.auth.signInWithPassword({ email, password });
 
     if (error) {
+      // Nooit het wachtwoord zelf loggen -- de rest van de Supabase-foutmelding
+      // (bv. "Invalid login credentials", "Email not confirmed") is niet
+      // gevoelig en helpt enorm bij het diagnosticeren van een verkeerd
+      // geconfigureerd account.
+      console.error(
+        `[auth] Supabase signInWithPassword faalde voor ${email}: status=${error.status} message=${error.message}`
+      );
       return {
-        error:
-          "Inloggen is mislukt. Controleer of APP_LOGIN_EMAIL/APP_LOGIN_PASSWORD overeenkomen met een bestaand Supabase-account.",
+        error: `Inloggen bij Supabase mislukt (${email}): ${error.message}. Controleer of dit exact het wachtwoord van dit Supabase-account is (niet alleen van APP_LOGIN_PASSWORD).`,
       };
     }
+
+    console.log(`[auth] Supabase login geslaagd, user id=${data.user?.id}`);
   } catch (err) {
+    console.error("[auth] Onverwachte fout tijdens signInWithSharedPassword:", err);
     if (err instanceof ConfigError) return { error: err.message };
     if (err instanceof Error) return { error: err.message };
     return { error: "Er is een onbekende fout opgetreden." };
