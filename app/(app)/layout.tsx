@@ -4,6 +4,7 @@ import { ConfigError } from "@/lib/env";
 import { signOut } from "@/lib/actions/auth";
 import { Nav } from "@/components/layout/Nav";
 import { BottomNav } from "@/components/layout/BottomNav";
+import { QuickAddButton } from "@/components/quickadd/QuickAddButton";
 import { Button } from "@/components/ui/Button";
 
 export default async function AppLayout({ children }: { children: React.ReactNode }) {
@@ -39,6 +40,7 @@ export default async function AppLayout({ children }: { children: React.ReactNod
             <Nav />
           </div>
           <div className="flex items-center gap-3">
+            <QuickAddButton />
             <form action={signOut}>
               <Button type="submit" variant="secondary">
                 Uitloggen
